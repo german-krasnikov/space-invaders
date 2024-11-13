@@ -77,23 +77,23 @@ namespace ShootEmUp
 
             if (other.TryGetComponent(out Player player))
             {
-                if (bullet.IsPlayer != player.isPlayer)
+                if (bullet.IsPlayer != player.IsPlayer)
                 {
-                    if (player.health <= 0)
+                    if (player.Health <= 0)
                         return;
 
-                    player.health = Mathf.Max(0, player.health - damage);
-                    player.OnHealthChanged?.Invoke(player, player.health);
+                    player.Health = Mathf.Max(0, player.Health - damage);
+                    player.OnHealthChanged?.Invoke(player, player.Health);
 
-                    if (player.health <= 0)
+                    if (player.Health <= 0)
                         player.OnHealthEmpty?.Invoke(player);
                 }
             }
             else if (other.TryGetComponent(out Enemy enemy))
             {
-                if (bullet.IsPlayer != enemy.isPlayer && enemy.health > 0)
+                if (bullet.IsPlayer != enemy.IsPlayer && enemy.Health > 0)
                 {
-                    enemy.health = Mathf.Max(0, enemy.health - damage);
+                    enemy.Health = Mathf.Max(0, enemy.Health - damage);
                 }
             }
         }

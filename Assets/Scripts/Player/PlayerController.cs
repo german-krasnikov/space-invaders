@@ -35,21 +35,21 @@ namespace ShootEmUp
             if (_fireRequired)
             {
                 bulletController.SpawnBullet(
-                    character.firePoint.position,
+                    character.FirePoint.position,
                     Color.blue,
                     (int) PhysicsLayer.PLAYER_BULLET,
                     1,
                     true,
-                    character.firePoint.rotation * Vector3.up * 3
+                    character.FirePoint.rotation * Vector3.up * 3
                 );
 
                 _fireRequired = false;
             }
             
             var moveDirection = new Vector2(_moveDirection, 0);
-            var moveStep = moveDirection * Time.fixedDeltaTime * character.speed;
-            var targetPosition = character._rigidbody.position + moveStep;
-            character._rigidbody.MovePosition(targetPosition);
+            var moveStep = moveDirection * Time.fixedDeltaTime * character.Speed;
+            var targetPosition = character.Rigidbody.position + moveStep;
+            character.Rigidbody.MovePosition(targetPosition);
         }
     }
 }

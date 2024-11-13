@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyManager : MonoBehaviour
+    public sealed class EnemyController : MonoBehaviour
     {
         [SerializeField]
         private Transform[] spawnPositions;
@@ -67,7 +66,7 @@ namespace ShootEmUp
         {
             foreach (var enemy in _activeEnemies.ToArray())
             {
-                if (enemy.health <= 0)
+                if (enemy.Health <= 0)
                 {
                     enemy.OnFire -= OnFire;
                     enemy.transform.SetParent(container);
