@@ -4,7 +4,11 @@ namespace ShootEmUp
 {
     public sealed class Player : BaseUnit
     {
-        public Action<Player, int> OnHealthChanged;
-        public Action<Player> OnHealthEmpty;
+        public event Action<Player> OnHealthEmpty;
+
+        protected override void AfterDealDamage(int damage)
+        {
+            if (Health <= 0) OnHealthEmpty?.Invoke(this);
+        }
     }
 }
