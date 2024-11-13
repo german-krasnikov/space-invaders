@@ -15,14 +15,17 @@ namespace ShootEmUp
 
         private void Awake()
         {
-            var position = transform.position;
-            _startPosition = new Vector3(position.x, _startPositionY, position.z);
+            _startPosition = new Vector3(transform.position.x, _startPositionY, transform.position.z);
         }
 
         private void FixedUpdate()
         {
-            var y = transform.position.y <= _endPositionY ? _startPositionY : _movingSpeedY * Time.fixedDeltaTime;
-            transform.position -= new Vector3(_startPosition.x, y, _startPosition.z);
+            if (transform.position.y <= _endPositionY)
+            {
+                transform.position = new Vector3(_startPosition.x, _startPosition.y, _startPosition.z);
+            }
+
+            transform.position -= new Vector3(_startPosition.x, _movingSpeedY * Time.fixedDeltaTime, _startPosition.z);
         }
     }
 }
