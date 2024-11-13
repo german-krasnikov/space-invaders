@@ -17,7 +17,11 @@ namespace ShootEmUp
 
         public void DealDamage(int damage, bool spawnByPlayer)
         {
-            if (spawnByPlayer == IsPlayer || Health <= 0) return;
+            if (spawnByPlayer == IsPlayer || Health <= 0)
+            {
+                return;
+            }
+
             Health = Mathf.Max(0, Health - damage);
             AfterDealDamage(damage);
         }

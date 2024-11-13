@@ -8,7 +8,10 @@ namespace ShootEmUp
 
         protected override void AfterDealDamage(int damage)
         {
-            if (Health <= 0) OnHealthEmpty?.Invoke(this);
+            if (Health <= 0)
+            {
+                OnHealthEmpty?.Invoke(this);
+            }
         }
     }
 }

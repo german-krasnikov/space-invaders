@@ -72,8 +72,11 @@ namespace ShootEmUp
         private void DealDamage(Bullet bullet, GameObject other)
         {
             var damage = bullet.Damage;
+
             if (damage <= 0)
+            {
                 return;
+            }
 
             if (other.TryGetComponent(out BaseUnit unit))
             {
