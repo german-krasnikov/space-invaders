@@ -26,13 +26,6 @@ namespace ShootEmUp
             AfterDealDamage(damage);
         }
 
-        public void MoveByDirection(Vector2 direction)
-        {
-            var moveStep = direction * Time.fixedDeltaTime * Speed;
-            var targetPosition = Rigidbody.position + moveStep;
-            Rigidbody.MovePosition(targetPosition);
-        }
-
         protected virtual void AfterDealDamage(int damage)
         {
         }
