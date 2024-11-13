@@ -10,34 +10,28 @@ namespace ShootEmUp
     {
         [SerializeField]
         private Transform[] spawnPositions;
-
         [SerializeField]
         private Transform[] attackPositions;
-        
         [SerializeField]
         private Player character;
-
         [SerializeField]
         private Transform worldTransform;
-
         [SerializeField]
         private Transform container;
-
         [SerializeField]
         private Enemy prefab;
-        
         [SerializeField]
         private BulletManager _bulletSystem;
         
-        private readonly HashSet<Enemy> m_activeEnemies = new();
-        private readonly Queue<Enemy> enemyPool = new();
+        private readonly HashSet<Enemy> _activeEnemies = new();
+        private readonly Queue<Enemy> _enemyPool = new();
         
         private void Awake()
         {
             for (var i = 0; i < 7; i++)
             {
-                Enemy enemy = Instantiate(prefab, container);
-                enemyPool.Enqueue(enemy);
+                var enemy = Instantiate(prefab, container);
+                _enemyPool.Enqueue(enemy);
             }
         }
 
@@ -47,21 +41,21 @@ namespace ShootEmUp
             {
                 yield return new WaitForSeconds(Random.Range(1, 2));
                 
-                if (!enemyPool.TryDequeue(out Enemy enemy))
+                if (!_enemyPool.TryDequeue(out var enemy))
                 {
                     enemy = Instantiate(prefab, container);
                 }
 
                 enemy.transform.SetParent(worldTransform);
 
-                Transform spawnPosition = RandomPoint(spawnPositions);
+                var spawnPosition = RandomPoint(spawnPositions);
                 enemy.transform.position = spawnPosition.position;
 
-                Transform attackPosition = RandomPoint(attackPositions);
+                var attackPosition = RandomPoint(attackPositions);
                 enemy.SetDestination(attackPosition.position);
-                enemy.target = character;
+                enemy.Target = character;
 
-                if (m_activeEnemies.Count < 5 && m_activeEnemies.Add(enemy))
+                if (_activeEnemies.Count < 5 && _activeEnemies.Add(enemy))
                 {
                     enemy.OnFire += OnFire;
                 }
@@ -70,15 +64,15 @@ namespace ShootEmUp
 
         private void FixedUpdate()
         {
-            foreach (Enemy enemy in m_activeEnemies.ToArray())
+            foreach (var enemy in _activeEnemies.ToArray())
             {
                 if (enemy.health <= 0)
                 {
                     enemy.OnFire -= OnFire;
                     enemy.transform.SetParent(container);
 
-                    m_activeEnemies.Remove(enemy);
-                    enemyPool.Enqueue(enemy);
+                    _activeEnemies.Remove(enemy);
+                    _enemyPool.Enqueue(enemy);
                 }
             }
         }
@@ -97,7 +91,7 @@ namespace ShootEmUp
 
         private Transform RandomPoint(Transform[] points)
         {
-            int index = Random.Range(0, points.Length);
+            var index = Random.Range(0, points.Length);
             return points[index];
         }
     }

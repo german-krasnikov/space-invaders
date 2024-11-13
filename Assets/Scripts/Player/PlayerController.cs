@@ -6,7 +6,6 @@ namespace ShootEmUp
     {
         [SerializeField]
         private Player character;
-
         [SerializeField]
         private BulletManager bulletManager;
 
@@ -47,9 +46,9 @@ namespace ShootEmUp
                 _fireRequired = false;
             }
             
-            Vector2 moveDirection = new Vector2(_moveDirection, 0);
-            Vector2 moveStep = moveDirection * Time.fixedDeltaTime * character.speed;
-            Vector2 targetPosition = character._rigidbody.position + moveStep;
+            var moveDirection = new Vector2(_moveDirection, 0);
+            var moveStep = moveDirection * Time.fixedDeltaTime * character.speed;
+            var targetPosition = character._rigidbody.position + moveStep;
             character._rigidbody.MovePosition(targetPosition);
         }
     }
