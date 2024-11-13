@@ -70,8 +70,8 @@ namespace ShootEmUp
                 return;
             }
 
-            var direction = distance.normalized * Time.fixedDeltaTime;
-            var nextPosition = Rigidbody.position + direction * Speed;
+            var moveDirection = distance.normalized * Time.fixedDeltaTime;
+            var nextPosition = Rigidbody.position + moveDirection * Speed;
             Rigidbody.MovePosition(nextPosition);
         }
     }

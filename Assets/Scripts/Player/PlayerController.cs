@@ -5,51 +5,38 @@ namespace ShootEmUp
     public sealed class PlayerController : MonoBehaviour
     {
         [SerializeField]
-        private Player character;
+        private Player player;
+        [SerializeField]
+        private PlayerInput _playerInput;
         [SerializeField]
         private BulletController bulletController;
 
-        private bool _fireRequired;
-        private float _moveDirection;
-
-        private void Awake()
+        private void OnEnable()
         {
-            character.OnHealthEmpty += _ => Time.timeScale = 0;
+            _playerInput.OnFire += FireHandler;
         }
 
-        private void Update()
+        private void OnDisable()
         {
-            if (Input.GetKeyDown(KeyCode.Space)) 
-                _fireRequired = true;
+            _playerInput.OnFire -= FireHandler;
+        }
 
-            if (Input.GetKey(KeyCode.LeftArrow))
-                _moveDirection = -1;
-            else if (Input.GetKey(KeyCode.RightArrow))
-                _moveDirection = 1;
-            else
-                _moveDirection = 0;
+        private void FireHandler()
+        {
+            bulletController.SpawnBullet(
+                player.FirePoint.position,
+                Color.blue,
+                (int)PhysicsLayer.PLAYER_BULLET,
+                1,
+                true,
+                player.FirePoint.rotation * Vector3.up * 3
+            );
         }
 
         private void FixedUpdate()
         {
-            if (_fireRequired)
-            {
-                bulletController.SpawnBullet(
-                    character.FirePoint.position,
-                    Color.blue,
-                    (int) PhysicsLayer.PLAYER_BULLET,
-                    1,
-                    true,
-                    character.FirePoint.rotation * Vector3.up * 3
-                );
-
-                _fireRequired = false;
-            }
-            
-            var moveDirection = new Vector2(_moveDirection, 0);
-            var moveStep = moveDirection * Time.fixedDeltaTime * character.Speed;
-            var targetPosition = character.Rigidbody.position + moveStep;
-            character.Rigidbody.MovePosition(targetPosition);
+            var moveDirection = new Vector2(_playerInput.MoveDirection, 0);
+            player.MoveByDirection(moveDirection);
         }
     }
 }
