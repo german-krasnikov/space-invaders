@@ -36,41 +36,41 @@ namespace ShootEmUp
 
         public void Reset()
         {
-            this.currentTime = this.countdown;
+            currentTime = countdown;
         }
         
         public void SetDestination(Vector2 endPoint)
         {
-            this.destination = endPoint;
-            this.isPointReached = false;
+            destination = endPoint;
+            isPointReached = false;
         }
 
         private void FixedUpdate()
         {
-            if (this.isPointReached)
+            if (isPointReached)
             {
                 //Attack:
-                if (this.target.health <= 0)
+                if (target.health <= 0)
                     return;
 
-                this.currentTime -= Time.fixedDeltaTime;
-                if (this.currentTime <= 0)
+                currentTime -= Time.fixedDeltaTime;
+                if (currentTime <= 0)
                 {
-                    Vector2 startPosition = this.firePoint.position;
-                    Vector2 vector = (Vector2) this.target.transform.position - startPosition;
+                    Vector2 startPosition = firePoint.position;
+                    Vector2 vector = (Vector2) target.transform.position - startPosition;
                     Vector2 direction = vector.normalized;
-                    this.OnFire?.Invoke(startPosition, direction);
+                    OnFire?.Invoke(startPosition, direction);
                     
-                    this.currentTime += this.countdown;
+                    currentTime += countdown;
                 }
             }
             else
             {
                 //Move:
-                Vector2 vector = this.destination - (Vector2) this.transform.position;
+                Vector2 vector = destination - (Vector2) transform.position;
                 if (vector.magnitude <= 0.25f)
                 {
-                    this.isPointReached = true;
+                    isPointReached = true;
                     return;
                 }
 

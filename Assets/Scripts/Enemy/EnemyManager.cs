@@ -36,8 +36,8 @@ namespace ShootEmUp
         {
             for (var i = 0; i < 7; i++)
             {
-                Enemy enemy = Instantiate(this.prefab, this.container);
-                this.enemyPool.Enqueue(enemy);
+                Enemy enemy = Instantiate(prefab, container);
+                enemyPool.Enqueue(enemy);
             }
         }
 
@@ -47,23 +47,23 @@ namespace ShootEmUp
             {
                 yield return new WaitForSeconds(Random.Range(1, 2));
                 
-                if (!this.enemyPool.TryDequeue(out Enemy enemy))
+                if (!enemyPool.TryDequeue(out Enemy enemy))
                 {
-                    enemy = Instantiate(this.prefab, this.container);
+                    enemy = Instantiate(prefab, container);
                 }
 
-                enemy.transform.SetParent(this.worldTransform);
+                enemy.transform.SetParent(worldTransform);
 
-                Transform spawnPosition = this.RandomPoint(this.spawnPositions);
+                Transform spawnPosition = RandomPoint(spawnPositions);
                 enemy.transform.position = spawnPosition.position;
 
-                Transform attackPosition = this.RandomPoint(this.attackPositions);
+                Transform attackPosition = RandomPoint(attackPositions);
                 enemy.SetDestination(attackPosition.position);
-                enemy.target = this.character;
+                enemy.target = character;
 
-                if (this.m_activeEnemies.Count < 5 && this.m_activeEnemies.Add(enemy))
+                if (m_activeEnemies.Count < 5 && m_activeEnemies.Add(enemy))
                 {
-                    enemy.OnFire += this.OnFire;
+                    enemy.OnFire += OnFire;
                 }
             }
         }
@@ -74,11 +74,11 @@ namespace ShootEmUp
             {
                 if (enemy.health <= 0)
                 {
-                    enemy.OnFire -= this.OnFire;
-                    enemy.transform.SetParent(this.container);
+                    enemy.OnFire -= OnFire;
+                    enemy.transform.SetParent(container);
 
                     m_activeEnemies.Remove(enemy);
-                    this.enemyPool.Enqueue(enemy);
+                    enemyPool.Enqueue(enemy);
                 }
             }
         }
