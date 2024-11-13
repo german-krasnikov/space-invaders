@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace ShootEmUp
@@ -21,7 +22,7 @@ namespace ShootEmUp
         [SerializeField]
         private Enemy prefab;
         [SerializeField]
-        private BulletManager _bulletSystem;
+        private BulletController bulletController;
         
         private readonly HashSet<Enemy> _activeEnemies = new();
         private readonly Queue<Enemy> _enemyPool = new();
@@ -79,7 +80,7 @@ namespace ShootEmUp
 
         private void OnFire(Vector2 position, Vector2 direction)
         {
-            _bulletSystem.SpawnBullet(
+            bulletController.SpawnBullet(
                 position,
                 Color.red,
                 (int) PhysicsLayer.ENEMY_BULLET,

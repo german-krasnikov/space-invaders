@@ -260,10 +260,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37bd15923a144ffbab0333dc6e74e641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 201757604187811891, guid: 5fe72886874b4e445b06cf777ca4920d, type: 3}
-  worldTransform: {fileID: 1290949509}
-  levelBounds: {fileID: 2572952653776768186}
-  container: {fileID: 1831741369}
+  _bulletPrefab: {fileID: 201757604187811891, guid: 5fe72886874b4e445b06cf777ca4920d,
+    type: 3}
+  _spawnContainer: {fileID: 1290949509}
+  _levelBounds: {fileID: 2572952653776768186}
+  _poolContainer: {fileID: 1831741369}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,7 +425,7 @@ MonoBehaviour:
   worldTransform: {fileID: 1683128698}
   container: {fileID: 178513672}
   prefab: {fileID: 102605417607457000, guid: 87fe189881a524806800482ac8eaaa83, type: 3}
-  _bulletSystem: {fileID: 363245577}
+  bulletController: {fileID: 363245577}
 --- !u!1 &883274639
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,7 +788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 4414282821800802405}
-  bulletManager: {fileID: 363245577}
+  bulletController: {fileID: 363245577}
 --- !u!1 &61006797492197339
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ namespace ShootEmUp
         [SerializeField]
         private Player character;
         [SerializeField]
-        private BulletManager bulletManager;
+        private BulletController bulletController;
 
         private bool _fireRequired;
         private float _moveDirection;
@@ -34,7 +34,7 @@ namespace ShootEmUp
         {
             if (_fireRequired)
             {
-                bulletManager.SpawnBullet(
+                bulletController.SpawnBullet(
                     character.firePoint.position,
                     Color.blue,
                     (int) PhysicsLayer.PLAYER_BULLET,
