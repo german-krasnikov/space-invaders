@@ -46,6 +46,7 @@ namespace ShootEmUp
         {
             for (int i = 0, count = _activeBullets.Count; i < count; i++)
             {
+                if (_activeBullets.Count <= i) continue;
                 var bullet = _activeBullets[i];
 
                 if (!_levelBounds.InBounds(bullet.Position))
