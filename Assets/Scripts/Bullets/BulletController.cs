@@ -14,18 +14,17 @@ namespace ShootEmUp
         [SerializeField]
         private Transform _poolContainer;
 
-        private readonly List<Bullet> _activeBullets = new();
-        private Pool<Bullet> _pool;
+        private IterablePool<Bullet> _iterablePool;
 
         public void SpawnBullet(Vector2 position, Color color, int physicsLayer, int damage, bool isPlayer, Vector2 velocity)
         {
-            var bullet = _pool.Get();
+            var bullet = _iterablePool.Get();
             bullet.StartMoving(position, color, physicsLayer, damage, isPlayer, velocity);
         }
 
         private void Awake()
         {
-            _pool = new(10, CreateBullet, OnGetFromPool, OnReleaseToPool);
+            _iterablePool = new IterablePool<Bullet>(new Pool<Bullet>(10, CreateBullet, OnGetFromPool, OnReleaseToPool));
         }
 
         private Bullet CreateBullet() => Instantiate(_bulletPrefab, _poolContainer);
@@ -34,38 +33,26 @@ namespace ShootEmUp
         {
             bullet.SetParent(_spawnContainer);
             bullet.OnHit += OnBulletHit;
-            _activeBullets.Add(bullet);
         }
 
         private void OnReleaseToPool(Bullet bullet)
         {
             bullet.OnHit -= OnBulletHit;
             bullet.SetParent(_poolContainer);
-            _activeBullets.Remove(bullet);
         }
 
-        private void FixedUpdate()
-        {
-            for (int i = 0, count = _activeBullets.Count; i < count; i++)
-            {
-                if (_activeBullets.Count <= i) continue;
-                var bullet = _activeBullets[i];
+        private void FixedUpdate() => _iterablePool.Iterate(OnIterate);
 
-                if (!_levelBounds.InBounds(bullet.Position))
-                {
-                    RemoveBullet(bullet);
-                }
+        private void OnIterate(Bullet bullet)
+        {
+            if (!_levelBounds.InBounds(bullet.Position))
+            {
+                RemoveBullet(bullet);
             }
         }
 
-        private void OnBulletHit(Bullet bullet)
-        {
-            _pool.Release(bullet);
-        }
+        private void OnBulletHit(Bullet bullet) => RemoveBullet(bullet);
 
-        private void RemoveBullet(Bullet bullet)
-        {
-            _pool.Release(bullet);
-        }
+        private void RemoveBullet(Bullet bullet) => _iterablePool.Release(bullet);
     }
 }

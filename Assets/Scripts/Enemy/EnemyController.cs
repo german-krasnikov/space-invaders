@@ -23,12 +23,11 @@ namespace ShootEmUp
         [SerializeField]
         private BulletController bulletController;
 
-        private readonly HashSet<Enemy> _activeEnemies = new();
-        private Pool<Enemy> _pool;
+        private IterablePool<Enemy> _iterablePool;
 
         private void Awake()
         {
-            _pool = new(7, OnCreate, OnGetFromPool, OnReleaseToPool);
+            _iterablePool = new IterablePool<Enemy>(new Pool<Enemy>(10, OnCreate, OnGetFromPool, OnReleaseToPool));
         }
 
         private Enemy OnCreate()
@@ -38,34 +37,25 @@ namespace ShootEmUp
             return result;
         }
 
-        private void OnGetFromPool(Enemy enemy)
-        {
-            enemy.SetParent(worldTransform);
-            _activeEnemies.Add(enemy);
-        }
+        private void OnGetFromPool(Enemy enemy) => enemy.SetParent(worldTransform);
 
-        private void OnReleaseToPool(Enemy enemy)
-        {
-            enemy.SetParent(container);
-            _activeEnemies.Remove(enemy);
-        }
+        private void OnReleaseToPool(Enemy enemy) => enemy.SetParent(container);
 
         public void Spawn()
         {
-            var enemy = _pool.Get();
+            var enemy = _iterablePool.Get();
             var spawnPosition = RandomPoint(spawnPositions);
             var attackPosition = RandomPoint(attackPositions);
             enemy.StartMovingToPlayer(spawnPosition, attackPosition, character);
         }
 
-        private void FixedUpdate()
+        private void FixedUpdate() => _iterablePool.Iterate(OnIterate);
+
+        private void OnIterate(Enemy enemy)
         {
-            foreach (var enemy in _activeEnemies.ToArray())
+            if (enemy.Health <= 0)
             {
-                if (enemy.Health <= 0)
-                {
-                    _pool.Release(enemy);
-                }
+                _iterablePool.Release(enemy);
             }
         }
 
