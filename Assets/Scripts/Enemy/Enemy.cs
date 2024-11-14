@@ -5,9 +5,6 @@ namespace ShootEmUp
 {
     public sealed class Enemy : BaseUnit
     {
-        public delegate void FireHandler(Vector2 position, Vector2 direction);
-        public event FireHandler OnFire;
-
         [SerializeField]
         private float _countdown;
 
@@ -16,7 +13,7 @@ namespace ShootEmUp
         private Vector2 _destination;
         private float _currentTime;
         private bool _isPointReached;
-        
+
         public void SetParent(Transform parent) => transform.parent = parent;
 
         public void Reset()
@@ -53,11 +50,7 @@ namespace ShootEmUp
 
             if (_currentTime <= 0)
             {
-                Vector2 startPosition = FirePoint.position;
-                var vector = (Vector2)Target.transform.position - startPosition;
-                var direction = vector.normalized;
-                OnFire?.Invoke(startPosition, direction);
-
+                Fire();
                 _currentTime += _countdown;
             }
         }
@@ -75,6 +68,14 @@ namespace ShootEmUp
             var moveDirection = distance.normalized * Time.fixedDeltaTime;
             var nextPosition = Rigidbody.position + moveDirection * Speed;
             Rigidbody.MovePosition(nextPosition);
+        }
+
+        public override void Fire()
+        {
+            Vector2 startPosition = FirePoint.position;
+            var vector = (Vector2)Target.transform.position - startPosition;
+            var direction = vector.normalized;
+            FireBullet(startPosition, direction * 2, Color.red, (int)PhysicsLayer.ENEMY_BULLET);
         }
     }
 }

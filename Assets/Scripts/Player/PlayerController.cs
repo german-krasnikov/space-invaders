@@ -8,29 +8,15 @@ namespace ShootEmUp
         private Player player;
         [SerializeField]
         private PlayerInput _playerInput;
-        [SerializeField]
-        private BulletController bulletController;
 
         private void OnEnable()
         {
-            _playerInput.OnFire += FireHandler;
+            _playerInput.OnFire += player.Fire;
         }
 
         private void OnDisable()
         {
-            _playerInput.OnFire -= FireHandler;
-        }
-
-        private void FireHandler()
-        {
-            bulletController.SpawnBullet(
-                player.FirePoint.position,
-                Color.blue,
-                (int)PhysicsLayer.PLAYER_BULLET,
-                1,
-                true,
-                player.FirePoint.rotation * Vector3.up * 3
-            );
+            _playerInput.OnFire -= player.Fire;
         }
 
         private void FixedUpdate()

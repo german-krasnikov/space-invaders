@@ -31,7 +31,12 @@ namespace ShootEmUp
             _pool = new(7, OnCreate, OnGetFromPool, OnReleaseToPool);
         }
 
-        private Enemy OnCreate() => Instantiate(prefab, container);
+        private Enemy OnCreate()
+        {
+            var result = Instantiate(prefab, container);
+            result.Construct(bulletController);
+            return result;
+        }
 
         private void OnGetFromPool(Enemy enemy)
         {
@@ -41,7 +46,6 @@ namespace ShootEmUp
 
         private void OnReleaseToPool(Enemy enemy)
         {
-            enemy.OnFire -= OnFire;
             enemy.SetParent(container);
             _activeEnemies.Remove(enemy);
         }
@@ -61,7 +65,7 @@ namespace ShootEmUp
 
                 if (_activeEnemies.Count < 5)
                 {
-                    enemy.OnFire += OnFire;
+                    enemy.Fire();
                 }
             }
         }
@@ -75,18 +79,6 @@ namespace ShootEmUp
                     _pool.Release(enemy);
                 }
             }
-        }
-
-        private void OnFire(Vector2 position, Vector2 direction)
-        {
-            bulletController.SpawnBullet(
-                position,
-                Color.red,
-                (int)PhysicsLayer.ENEMY_BULLET,
-                1,
-                false,
-                direction * 2
-            );
         }
 
         private Transform RandomPoint(Transform[] points)
