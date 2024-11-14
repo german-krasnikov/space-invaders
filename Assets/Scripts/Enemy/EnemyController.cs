@@ -22,17 +22,28 @@ namespace ShootEmUp
         private Enemy prefab;
         [SerializeField]
         private BulletController bulletController;
-        
+
         private readonly HashSet<Enemy> _activeEnemies = new();
-        private readonly Queue<Enemy> _enemyPool = new();
-        
+        private Pool<Enemy> _pool;
+
         private void Awake()
         {
-            for (var i = 0; i < 7; i++)
-            {
-                var enemy = Instantiate(prefab, container);
-                _enemyPool.Enqueue(enemy);
-            }
+            _pool = new(7, OnCreate, OnGetFromPool, OnReleaseToPool);
+        }
+
+        private Enemy OnCreate() => Instantiate(prefab, container);
+
+        private void OnGetFromPool(Enemy enemy)
+        {
+            enemy.transform.SetParent(worldTransform);
+            _activeEnemies.Add(enemy);
+        }
+
+        private void OnReleaseToPool(Enemy enemy)
+        {
+            enemy.OnFire -= OnFire;
+            enemy.transform.SetParent(container);
+            _activeEnemies.Remove(enemy);
         }
 
         private IEnumerator Start()
@@ -40,17 +51,10 @@ namespace ShootEmUp
             while (true)
             {
                 yield return new WaitForSeconds(Random.Range(1, 2));
-                
-                if (!_enemyPool.TryDequeue(out var enemy))
-                {
-                    enemy = Instantiate(prefab, container);
-                }
 
-                enemy.transform.SetParent(worldTransform);
-
+                var enemy = _pool.Get();
                 var spawnPosition = RandomPoint(spawnPositions);
                 enemy.transform.position = spawnPosition.position;
-
                 var attackPosition = RandomPoint(attackPositions);
                 enemy.SetDestination(attackPosition.position);
                 enemy.Target = character;
@@ -68,11 +72,7 @@ namespace ShootEmUp
             {
                 if (enemy.Health <= 0)
                 {
-                    enemy.OnFire -= OnFire;
-                    enemy.transform.SetParent(container);
-
-                    _activeEnemies.Remove(enemy);
-                    _enemyPool.Enqueue(enemy);
+                    _pool.Release(enemy);
                 }
             }
         }
@@ -82,7 +82,7 @@ namespace ShootEmUp
             bulletController.SpawnBullet(
                 position,
                 Color.red,
-                (int) PhysicsLayer.ENEMY_BULLET,
+                (int)PhysicsLayer.ENEMY_BULLET,
                 1,
                 false,
                 direction * 2

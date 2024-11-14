@@ -27,7 +27,7 @@ namespace ShootEmUp
             _isPlayer = isPlayer;
         }
 
-        public void DealDamage(GameObject target)
+        private void DealDamage(GameObject target)
         {
             if (_damage <= 0)
             {
