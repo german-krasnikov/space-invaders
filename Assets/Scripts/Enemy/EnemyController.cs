@@ -50,24 +50,12 @@ namespace ShootEmUp
             _activeEnemies.Remove(enemy);
         }
 
-        private IEnumerator Start()
+        public void Spawn()
         {
-            while (true)
-            {
-                yield return new WaitForSeconds(Random.Range(1, 2));
-
-                var enemy = _pool.Get();
-                var spawnPosition = RandomPoint(spawnPositions);
-                enemy.transform.position = spawnPosition.position;
-                var attackPosition = RandomPoint(attackPositions);
-                enemy.SetDestination(attackPosition.position);
-                enemy.Target = character;
-
-                if (_activeEnemies.Count < 5)
-                {
-                    enemy.Fire();
-                }
-            }
+            var enemy = _pool.Get();
+            var spawnPosition = RandomPoint(spawnPositions);
+            var attackPosition = RandomPoint(attackPositions);
+            enemy.StartMovingToPlayer(spawnPosition, attackPosition, character);
         }
 
         private void FixedUpdate()

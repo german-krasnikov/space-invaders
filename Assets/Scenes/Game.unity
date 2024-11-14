@@ -367,6 +367,7 @@ GameObject:
   m_Component:
   - component: {fileID: 562298204}
   - component: {fileID: 562298205}
+  - component: {fileID: 562298206}
   m_Layer: 0
   m_Name: Enemies
   m_TagString: Untagged
@@ -426,6 +427,19 @@ MonoBehaviour:
   container: {fileID: 178513672}
   prefab: {fileID: 102605417607457000, guid: 87fe189881a524806800482ac8eaaa83, type: 3}
   bulletController: {fileID: 363245577}
+--- !u!114 &562298206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562298203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d443c32646b4eeb9df1fd97e87d6e5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyController: {fileID: 562298205}
 --- !u!1 &883274639
 GameObject:
   m_ObjectHideFlags: 0

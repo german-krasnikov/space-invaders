@@ -27,6 +27,21 @@ namespace ShootEmUp
             _isPointReached = false;
         }
 
+        public override void Fire()
+        {
+            Vector2 startPosition = FirePoint.position;
+            var vector = (Vector2)Target.transform.position - startPosition;
+            var direction = vector.normalized;
+            FireBullet(startPosition, direction * 2, Color.red, (int)PhysicsLayer.ENEMY_BULLET);
+        }
+
+        public void StartMovingToPlayer(Transform spawnPosition, Transform attackPosition, Player player)
+        {
+            transform.position = spawnPosition.position;
+            SetDestination(attackPosition.position);
+            Target = player;
+        }
+
         private void FixedUpdate()
         {
             if (_isPointReached)
@@ -68,14 +83,6 @@ namespace ShootEmUp
             var moveDirection = distance.normalized * Time.fixedDeltaTime;
             var nextPosition = Rigidbody.position + moveDirection * Speed;
             Rigidbody.MovePosition(nextPosition);
-        }
-
-        public override void Fire()
-        {
-            Vector2 startPosition = FirePoint.position;
-            var vector = (Vector2)Target.transform.position - startPosition;
-            var direction = vector.normalized;
-            FireBullet(startPosition, direction * 2, Color.red, (int)PhysicsLayer.ENEMY_BULLET);
         }
     }
 }
