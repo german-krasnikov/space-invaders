@@ -3,13 +3,12 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class Enemy : BaseUnit
+    public sealed class Enemy : Ship
     {
         [SerializeField]
         private float _countdown;
 
-        [NonSerialized]
-        public Player Target;
+        private Player _target;
         private Vector2 _destination;
         private float _currentTime;
         private bool _isPointReached;
@@ -21,16 +20,10 @@ namespace ShootEmUp
             _currentTime = _countdown;
         }
 
-        public void SetDestination(Vector2 endPoint)
-        {
-            _destination = endPoint;
-            _isPointReached = false;
-        }
-
         public override void Fire()
         {
             Vector2 startPosition = FirePoint.position;
-            var vector = (Vector2)Target.transform.position - startPosition;
+            var vector = (Vector2)_target.transform.position - startPosition;
             var direction = vector.normalized;
             FireBullet(startPosition, direction * 2, Color.red, (int)PhysicsLayer.ENEMY_BULLET);
         }
@@ -39,7 +32,13 @@ namespace ShootEmUp
         {
             transform.position = spawnPosition.position;
             SetDestination(attackPosition.position);
-            Target = player;
+            _target = player;
+        }
+
+        private void SetDestination(Vector2 endPoint)
+        {
+            _destination = endPoint;
+            _isPointReached = false;
         }
 
         private void FixedUpdate()
@@ -56,7 +55,7 @@ namespace ShootEmUp
 
         private void Attack()
         {
-            if (Target.Health <= 0)
+            if (_target.Health <= 0)
             {
                 return;
             }

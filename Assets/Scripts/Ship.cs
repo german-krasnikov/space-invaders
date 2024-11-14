@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public abstract class BaseUnit : MonoBehaviour
+    public abstract class Ship : MonoBehaviour
     {
         [SerializeField]
         public bool IsPlayer;

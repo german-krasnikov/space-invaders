@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class Player : BaseUnit
+    public sealed class Player : Ship
     {
         public event Action OnHealthEmpty;
 

@@ -34,7 +34,7 @@ namespace ShootEmUp
                 return;
             }
 
-            if (target.TryGetComponent(out BaseUnit unit))
+            if (target.TryGetComponent(out Ship unit))
             {
                 unit.DealDamage(_damage, _isPlayer);
             }
