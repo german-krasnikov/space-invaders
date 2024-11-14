@@ -29,7 +29,7 @@ namespace ShootEmUp
             }
 
             bullet.StartMoving(position, color, physicsLayer, damage, isPlayer, velocity);
-            bullet.OnCollisionEntered += OnBulletCollision;
+            bullet.OnHit += OnBulletHit;
             _activeBullets.Add(bullet);
         }
 
@@ -56,33 +56,17 @@ namespace ShootEmUp
             }
         }
 
-        private void OnBulletCollision(Bullet bullet, Collision2D collision)
+        private void OnBulletHit(Bullet bullet)
         {
-            DealDamage(bullet, collision.gameObject);
             RemoveBullet(bullet);
         }
 
         private void RemoveBullet(Bullet bullet)
         {
             _activeBullets.Remove(bullet);
-            bullet.OnCollisionEntered -= OnBulletCollision;
+            bullet.OnHit -= OnBulletHit;
             bullet.SetParent(_poolContainer);
             _bulletPool.Enqueue(bullet);
-        }
-
-        private void DealDamage(Bullet bullet, GameObject other)
-        {
-            var damage = bullet.Damage;
-
-            if (damage <= 0)
-            {
-                return;
-            }
-
-            if (other.TryGetComponent(out BaseUnit unit))
-            {
-                unit.DealDamage(damage, bullet.IsPlayer);
-            }
         }
     }
 }

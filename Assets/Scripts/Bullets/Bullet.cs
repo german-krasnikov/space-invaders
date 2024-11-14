@@ -5,16 +5,15 @@ namespace ShootEmUp
 {
     public sealed class Bullet : MonoBehaviour
     {
-        public event Action<Bullet, Collision2D> OnCollisionEntered;
+        public event Action<Bullet> OnHit;
 
         [SerializeField]
         private Rigidbody2D _rigidbody;
         [SerializeField]
         private SpriteRenderer _spriteRenderer;
-        [NonSerialized]
-        public bool IsPlayer;
-        [NonSerialized]
-        public int Damage;
+        
+        private bool _isPlayer;
+        private int _damage;
         public void SetParent(Transform parent) => transform.parent = parent;
         public Vector3 Position => transform.position;
 
@@ -24,13 +23,27 @@ namespace ShootEmUp
             _spriteRenderer.color = color;
             transform.position = position;
             gameObject.layer = physicsLayer;
-            Damage = damage;
-            IsPlayer = isPlayer;
+            _damage = damage;
+            _isPlayer = isPlayer;
+        }
+
+        public void DealDamage(GameObject target)
+        {
+            if (_damage <= 0)
+            {
+                return;
+            }
+
+            if (target.TryGetComponent(out BaseUnit unit))
+            {
+                unit.DealDamage(_damage, _isPlayer);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            OnCollisionEntered?.Invoke(this, collision);
+            DealDamage(collision.gameObject);
+            OnHit?.Invoke(this);
         }
     }
 }
