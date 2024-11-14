@@ -21,7 +21,7 @@ namespace ShootEmUp
 
         protected override void AfterDealDamage(int damage)
         {
-            if (Health <= 0)
+            if (IsDead)
             {
                 OnHealthEmpty?.Invoke();
             }

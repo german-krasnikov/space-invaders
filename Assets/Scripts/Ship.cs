@@ -5,17 +5,19 @@ namespace ShootEmUp
     public abstract class Ship : MonoBehaviour
     {
         [SerializeField]
-        public bool IsPlayer;
+        protected bool IsPlayer;
         [SerializeField]
-        public Transform FirePoint;
+        protected Transform FirePoint;
         [SerializeField]
-        public int Health;
+        protected int Health;
         [SerializeField]
-        public Rigidbody2D Rigidbody;
+        protected Rigidbody2D Rigidbody;
         [SerializeField]
-        public float Speed;
+        protected float Speed;
         [SerializeField]
         private BulletController _bulletController;
+        
+        public bool IsDead => Health <= 0;
 
         public void Construct(BulletController bulletController)
         {

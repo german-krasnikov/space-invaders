@@ -55,7 +55,7 @@ namespace ShootEmUp
 
         private void Attack()
         {
-            if (_target.Health <= 0)
+            if (_target.IsDead)
             {
                 return;
             }

@@ -53,7 +53,7 @@ namespace ShootEmUp
 
         private void OnIterate(Enemy enemy)
         {
-            if (enemy.Health <= 0)
+            if (enemy.IsDead)
             {
                 _iterablePool.Release(enemy);
             }
