@@ -16,6 +16,8 @@ namespace ShootEmUp
         private Vector2 _destination;
         private float _currentTime;
         private bool _isPointReached;
+        
+        public void SetParent(Transform parent) => transform.parent = parent;
 
         public void Reset()
         {

@@ -35,14 +35,14 @@ namespace ShootEmUp
 
         private void OnGetFromPool(Enemy enemy)
         {
-            enemy.transform.SetParent(worldTransform);
+            enemy.SetParent(worldTransform);
             _activeEnemies.Add(enemy);
         }
 
         private void OnReleaseToPool(Enemy enemy)
         {
             enemy.OnFire -= OnFire;
-            enemy.transform.SetParent(container);
+            enemy.SetParent(container);
             _activeEnemies.Remove(enemy);
         }
 
@@ -59,7 +59,7 @@ namespace ShootEmUp
                 enemy.SetDestination(attackPosition.position);
                 enemy.Target = character;
 
-                if (_activeEnemies.Count < 5 && _activeEnemies.Add(enemy))
+                if (_activeEnemies.Count < 5)
                 {
                     enemy.OnFire += OnFire;
                 }

@@ -25,18 +25,19 @@ namespace ShootEmUp
 
         public T Get()
         {
-            if (_pool.TryDequeue(out var item))
+            if (!_pool.TryDequeue(out var item))
             {
-                _onGet(item);
-                return item;
+                item = _onCreate();
             }
 
-            return _onCreate();
+            _onGet(item);
+            return item;
         }
 
         public void Release(T item)
         {
             _pool.Enqueue(item);
+            _onRelease(item);
         }
     }
 }
